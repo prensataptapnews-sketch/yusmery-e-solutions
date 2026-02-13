@@ -8,29 +8,34 @@ export const authConfig = {
     callbacks: {
         authorized({ auth, request: { nextUrl } }) {
             const isLoggedIn = !!auth?.user;
-            const isOnAdmin = nextUrl.pathname.startsWith('/admin');
-            const isOnDashboard = nextUrl.pathname.startsWith('/dashboard') || nextUrl.pathname === '/';
+            const userRole = auth?.user?.role;
+
+            const isSuperAdminRoute = nextUrl.pathname.startsWith('/super-admin');
+            const isAdminRoute = nextUrl.pathname.startsWith('/admin');
+            const isTeacherRoute = nextUrl.pathname.startsWith('/teacher');
+            const isDashboardRoute = nextUrl.pathname.startsWith('/dashboard') || nextUrl.pathname === '/';
             const isAuthPage = nextUrl.pathname.startsWith('/login') || nextUrl.pathname.startsWith('/register');
 
-            if (isOnAdmin) {
-                if (isLoggedIn) {
-                    // Check for admin role
-                    const role = auth.user.role;
-                    return role === 'SUPER_ADMIN' || role === 'COMPANY_ADMIN';
-                }
-                return false; // Redirect to login
+            if (isAuthPage) {
+                if (isLoggedIn) return Response.redirect(new URL('/', nextUrl));
+                return true;
             }
 
-            if (isOnDashboard) {
+            if (isSuperAdminRoute) {
+                return isLoggedIn && userRole === 'SUPER_ADMIN';
+            }
+
+            if (isAdminRoute) {
+                return isLoggedIn && (userRole === 'SUPER_ADMIN' || userRole === 'ADMINISTRADOR');
+            }
+
+            if (isTeacherRoute) {
+                return isLoggedIn && (userRole === 'SUPER_ADMIN' || userRole === 'PROFESOR');
+            }
+
+            if (isDashboardRoute) {
                 if (isLoggedIn) return true;
                 return false; // Redirect to login
-            }
-
-            if (isLoggedIn && isAuthPage) {
-                // Redirect logged in users away from login page
-                // Default to / (dashboard) or /admin depending on role? 
-                // For now just redirect to home
-                return Response.redirect(new URL('/', nextUrl));
             }
 
             return true;
