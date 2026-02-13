@@ -6,5 +6,5 @@
   package = "@netlify/plugin-nextjs"
 
 [build.environment]
-  NEXT_USE_NETLIFY_EDGE = "true"
-  PRISMA_GENERATE_DATAPROXY = "true"
+  NEXT_USE_NETLIFY_EDGE = "false"
+  PRISMA_GENERATE_DATAPROXY = "false"
