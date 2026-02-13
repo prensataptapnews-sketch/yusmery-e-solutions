@@ -1,0 +1,118 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e1]:
+  - generic [ref=e4]:
+    - generic [ref=e5]:
+      - generic [ref=e6]: Bienvenido de nuevo
+      - generic [ref=e7]: Ingresa tus credenciales para acceder
+    - generic [ref=e10]:
+      - generic [ref=e11]:
+        - generic [ref=e12]: Correo Electrónico
+        - textbox "Correo Electrónico" [ref=e13]:
+          - /placeholder: nombre@empresa.com
+          - text: super@esolutions.com
+      - generic [ref=e14]:
+        - generic [ref=e15]: Contraseña
+        - textbox "Contraseña" [active] [ref=e16]: password123
+      - button "Iniciar Sesión" [ref=e17]
+    - generic [ref=e19]:
+      - text: "Credenciales de prueba:"
+      - text: admin@esolutions.com / admin123
+  - generic:
+    - generic [ref=e22]:
+      - generic [ref=e23]:
+        - generic [ref=e24]:
+          - navigation [ref=e25]:
+            - button "previous" [disabled] [ref=e26]:
+              - img "previous" [ref=e27]
+            - generic [ref=e29]:
+              - generic [ref=e30]: 1/
+              - text: "1"
+            - button "next" [disabled] [ref=e31]:
+              - img "next" [ref=e32]
+          - img
+        - generic [ref=e34]:
+          - generic [ref=e35]:
+            - img [ref=e36]
+            - generic "Latest available version is detected (16.1.6)." [ref=e38]: Next.js 16.1.6
+            - generic [ref=e39]: Turbopack
+          - img
+      - dialog "Build Error" [ref=e41]:
+        - generic [ref=e44]:
+          - generic [ref=e45]:
+            - generic [ref=e46]:
+              - generic [ref=e48]: Build Error
+              - generic [ref=e49]:
+                - button "Copy Error Info" [ref=e50] [cursor=pointer]:
+                  - img [ref=e51]
+                - link "Go to related documentation" [ref=e53] [cursor=pointer]:
+                  - /url: https://nextjs.org/docs/messages/module-not-found
+                  - img [ref=e54]
+                - button "Attach Node.js inspector" [ref=e56] [cursor=pointer]:
+                  - img [ref=e57]
+            - generic [ref=e66]: "Module not found: Can't resolve '@/components/ui/switch'"
+          - generic [ref=e68]:
+            - generic [ref=e70]:
+              - img [ref=e72]
+              - generic [ref=e75]: ./src/app/(super-admin)/super-admin/diagnosticos/crear/page.tsx (9:1)
+              - button "Open in editor" [ref=e76] [cursor=pointer]:
+                - img [ref=e78]
+            - generic [ref=e81]:
+              - generic [ref=e82]: Module not found
+              - generic [ref=e83]: ": Can't resolve"
+              - text: "'@/components/ui/switch'"
+              - generic [ref=e84]: 7 |
+              - text: import
+              - generic [ref=e85]: "{"
+              - text: Input
+              - generic [ref=e86]: "}"
+              - text: from "@/components/ui/input"
+              - generic [ref=e87]: 8 |
+              - text: import
+              - generic [ref=e88]: "{"
+              - text: Textarea
+              - generic [ref=e89]: "}"
+              - text: from "@/components/ui/textarea" >
+              - generic [ref=e90]: 9 |
+              - text: import
+              - generic [ref=e91]: "{"
+              - text: Switch
+              - generic [ref=e92]: "}"
+              - text: from "@/components/ui/switch"
+              - generic [ref=e93]: "|"
+              - text: ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+              - generic [ref=e94]: 10 |
+              - text: import
+              - generic [ref=e95]: "{"
+              - text: Label
+              - generic [ref=e96]: "}"
+              - text: from "@/components/ui/label"
+              - generic [ref=e97]: 11 |
+              - text: import
+              - generic [ref=e98]: "{"
+              - text: Card, CardContent, CardHeader, CardTitle
+              - generic [ref=e99]: "}"
+              - text: from "@/components/ui/card"
+              - generic [ref=e100]: 12 |
+              - text: import
+              - generic [ref=e101]: "{"
+              - text: Select, SelectContent, SelectItem, SelectTrigger, SelectValue
+              - generic [ref=e102]: "}"
+              - text: from "@/components/ui/select"
+              - generic [ref=e103]:
+                - text: "Import map: aliased to relative './src/components/ui/switch' inside of [project]/ Import traces: Client Component Browser: ./src/app/(super-admin)/super-admin/diagnosticos/crear/page.tsx [Client Component Browser] ./src/app/(super-admin)/super-admin/diagnosticos/crear/page.tsx [Server Component] Client Component SSR: ./src/app/(super-admin)/super-admin/diagnosticos/crear/page.tsx [Client Component SSR] ./src/app/(super-admin)/super-admin/diagnosticos/crear/page.tsx [Server Component]"
+                - link "https://nextjs.org/docs/messages/module-not-found" [ref=e104] [cursor=pointer]:
+                  - /url: https://nextjs.org/docs/messages/module-not-found
+        - generic [ref=e105]: "1"
+        - generic [ref=e106]: "2"
+    - generic [ref=e111] [cursor=pointer]:
+      - button "Open Next.js Dev Tools" [ref=e112]:
+        - img [ref=e113]
+      - button "Open issues overlay" [ref=e117]:
+        - generic [ref=e118]:
+          - generic [ref=e119]: "0"
+          - generic [ref=e120]: "1"
+        - generic [ref=e121]: Issue
+  - alert [ref=e122]
+```
