@@ -27,9 +27,9 @@ export default auth((req) => {
     if (isLoginRoute) {
         if (isLoggedIn) {
             if (userRole === "SUPER_ADMIN") return NextResponse.redirect(new URL("/super-admin", nextUrl))
-            if (userRole === "ADMINISTRADOR") return NextResponse.redirect(new URL("/admin", nextUrl))
-            if (userRole === "PROFESOR") return NextResponse.redirect(new URL("/teacher", nextUrl))
-            // Default for COLABORADOR or others
+            if (userRole === "ADMIN" || userRole === "ADMINISTRADOR") return NextResponse.redirect(new URL("/admin", nextUrl))
+            if (userRole === "TEACHER" || userRole === "PROFESOR") return NextResponse.redirect(new URL("/teacher", nextUrl))
+            // Default for STUDENT, COLABORADOR or others
             return NextResponse.redirect(new URL("/dashboard", nextUrl))
         }
         return NextResponse.next()
@@ -44,18 +44,18 @@ export default auth((req) => {
         return NextResponse.redirect(new URL("/dashboard", nextUrl))
     }
 
-    if (isAdminRoute && !["ADMINISTRADOR", "SUPER_ADMIN"].includes(userRole as string)) {
+    if (isAdminRoute && !["ADMIN", "ADMINISTRADOR", "SUPER_ADMIN"].includes(userRole as string)) {
         return NextResponse.redirect(new URL("/dashboard", nextUrl))
     }
 
-    if (isTeacherRoute && !["PROFESOR", "SUPER_ADMIN"].includes(userRole as string)) {
+    if (isTeacherRoute && !["TEACHER", "PROFESOR", "SUPER_ADMIN"].includes(userRole as string)) {
         return NextResponse.redirect(new URL("/dashboard", nextUrl))
     }
 
     if (nextUrl.pathname === "/" && isLoggedIn) {
         if (userRole === "SUPER_ADMIN") return NextResponse.redirect(new URL("/super-admin", nextUrl))
-        if (userRole === "ADMINISTRADOR") return NextResponse.redirect(new URL("/admin", nextUrl))
-        if (userRole === "PROFESOR") return NextResponse.redirect(new URL("/teacher", nextUrl))
+        if (userRole === "ADMIN" || userRole === "ADMINISTRADOR") return NextResponse.redirect(new URL("/admin", nextUrl))
+        if (userRole === "TEACHER" || userRole === "PROFESOR") return NextResponse.redirect(new URL("/teacher", nextUrl))
         return NextResponse.redirect(new URL("/dashboard", nextUrl))
     }
 

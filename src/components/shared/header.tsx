@@ -50,8 +50,8 @@ export function Header() {
         },
     ]
 
-    const isAdmin = user?.role === "ADMINISTRADOR" || user?.role === "SUPER_ADMIN"
-    const isTeacher = user?.role === "PROFESOR"
+    const isAdmin = user?.role === "ADMINISTRADOR" || user?.role === "SUPER_ADMIN" || user?.role === "ADMIN"
+    const isTeacher = user?.role === "PROFESOR" || user?.role === "TEACHER"
 
     if (isAdmin) {
         routes.splice(1, 0, {

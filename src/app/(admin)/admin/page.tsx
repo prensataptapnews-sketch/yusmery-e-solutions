@@ -11,7 +11,7 @@ import { Area } from "@prisma/client"
 export default async function AdminDashboard() {
     const session = await auth();
 
-    if (!session?.user || session.user.role !== "ADMINISTRADOR") {
+    if (!session?.user || !["ADMIN", "ADMINISTRADOR", "SUPER_ADMIN"].includes(session.user.role as string)) {
         redirect("/")
     }
 

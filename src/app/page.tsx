@@ -17,10 +17,13 @@ export default async function RootPage() {
         switch (session.user?.role) {
             case 'SUPER_ADMIN':
                 redirect('/super-admin')
+            case 'ADMIN':
             case 'ADMINISTRADOR':
                 redirect('/admin')
+            case 'TEACHER':
             case 'PROFESOR':
                 redirect('/teacher')
+            case 'STUDENT':
             case 'COLABORADOR':
                 redirect('/dashboard')
             default:

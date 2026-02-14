@@ -23,7 +23,7 @@ import { Badge } from "@/components/ui/badge"
 export default async function TeacherDashboard() {
     const session = await auth();
 
-    if (!session?.user || (session.user.role !== 'PROFESOR' && session.user.role !== 'SUPER_ADMIN')) {
+    if (!session?.user || !['PROFESOR', 'TEACHER', 'SUPER_ADMIN'].includes(session.user.role as string)) {
         redirect("/login");
     }
 

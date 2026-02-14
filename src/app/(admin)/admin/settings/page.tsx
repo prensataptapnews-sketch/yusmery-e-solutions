@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button"
 
 export default async function AdminSettingsPage() {
     const session = await auth();
-    if (!session?.user || session.user.role !== 'ADMINISTRADOR' && session.user.role !== 'SUPER_ADMIN') {
+    if (!session?.user || !['ADMIN', 'ADMINISTRADOR', 'SUPER_ADMIN'].includes(session.user.role as string)) {
         redirect("/login");
     }
 

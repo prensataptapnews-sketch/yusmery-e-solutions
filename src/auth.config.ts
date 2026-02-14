@@ -26,11 +26,11 @@ export const authConfig = {
             }
 
             if (isAdminRoute) {
-                return isLoggedIn && (userRole === 'SUPER_ADMIN' || userRole === 'ADMINISTRADOR');
+                return isLoggedIn && (userRole === 'SUPER_ADMIN' || userRole === 'ADMINISTRADOR' || userRole === 'ADMIN');
             }
 
             if (isTeacherRoute) {
-                return isLoggedIn && (userRole === 'SUPER_ADMIN' || userRole === 'PROFESOR');
+                return isLoggedIn && (userRole === 'SUPER_ADMIN' || userRole === 'PROFESOR' || userRole === 'TEACHER');
             }
 
             if (isDashboardRoute) {

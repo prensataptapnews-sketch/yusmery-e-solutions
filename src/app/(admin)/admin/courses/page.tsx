@@ -9,7 +9,7 @@ import { Area } from "@prisma/client"
 export default async function AdminCoursesPage() {
     const session = await auth();
 
-    if (!session?.user || session.user.role !== 'ADMINISTRADOR' && session.user.role !== 'SUPER_ADMIN') {
+    if (!session?.user || !['ADMIN', 'ADMINISTRADOR', 'SUPER_ADMIN'].includes(session.user.role as string)) {
         redirect("/login");
     }
 
