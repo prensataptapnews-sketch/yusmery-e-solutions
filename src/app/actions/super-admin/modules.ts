@@ -9,18 +9,13 @@ export async function getModules() {
         const session = await auth()
 
         // DEBUG LOGGING
-        console.log("--- GET MODULES DEBUG ---")
-        console.log("User:", session?.user?.email)
-        console.log("Role:", session?.user?.role)
 
         if (session?.user?.role !== 'SUPER_ADMIN') {
             const role = session?.user?.role || 'No Role'
-            console.log("Access Denied: Not Super Admin. User Role:", role)
             return []
         }
 
         const count = await prisma.systemModule.count()
-        console.log("DB Module Count:", count)
 
         const modules = await prisma.systemModule.findMany({
             include: {
@@ -29,7 +24,6 @@ export async function getModules() {
             orderBy: { name: 'asc' }
         })
 
-        console.log(`Returning ${modules.length} modules`)
         return modules
     } catch (e) {
         console.error("GET_MODULES ERROR:", e)
@@ -39,7 +33,6 @@ export async function getModules() {
 
 export async function toggleModuleStatus(key: string, currentStatus: string) {
     const session = await auth()
-    console.log("[TOGGLE_MODULE] Request:", { key, currentStatus, user: session?.user?.id, role: session?.user?.role })
 
     if (session?.user?.role !== 'SUPER_ADMIN') {
         console.error("[TOGGLE_MODULE] Unauthorized access attempt")
@@ -70,7 +63,6 @@ export async function toggleModuleStatus(key: string, currentStatus: string) {
             }
         }
 
-        console.log("[TOGGLE_MODULE] Updating to:", newStatus)
 
         const result = await prisma.systemModule.update({
             where: { key },
@@ -79,7 +71,6 @@ export async function toggleModuleStatus(key: string, currentStatus: string) {
                 updatedBy: session.user.id
             }
         })
-        console.log("[TOGGLE_MODULE] Success:", result)
         revalidatePath("/super-admin/modules")
         return { success: true, message: `Módulo ${newStatus === 'ACTIVE' ? 'activado' : 'desactivado'} exitosamente`, newStatus }
     } catch (error) {

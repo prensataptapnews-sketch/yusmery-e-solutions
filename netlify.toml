@@ -1,5 +1,5 @@
 [build]
-  command = "npx prisma generate && npx prisma db push --accept-data-loss && npx prisma db seed && next build"
+  command = "npx prisma generate && npx prisma db push --accept-data-loss && (if [ \"$SEED_DATABASE\" = \"true\" ]; then npx prisma db seed; fi) && next build"
   publish = ".next"
 
 [[plugins]]
@@ -8,3 +8,14 @@
 [build.environment]
   NEXT_USE_NETLIFY_EDGE = "false"
   PRISMA_GENERATE_DATAPROXY = "false"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "no-referrer-when-downgrade"
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' https://rzaezifmadibxuqttxri.supabase.co;"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+    Strict-Transport-Security = "max-age=31536000; includeSubDomains; preload"

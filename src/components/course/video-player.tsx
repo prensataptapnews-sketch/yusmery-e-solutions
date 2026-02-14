@@ -82,7 +82,6 @@ export function VideoPlayer({ src, poster, autoPlay = false, lessonId, onComplet
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ lessonId: id, completed, timeSpent: Math.floor(time) }),
             })
-            console.log("Progress saved", { id, completed, time })
         } catch (error) {
             console.error("Failed to save progress", error)
         }

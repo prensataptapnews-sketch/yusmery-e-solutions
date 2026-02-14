@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { signOut } from "next-auth/react"
 import { AdminUserNav } from "@/components/admin/user-nav"
+import ErrorBoundary from "@/components/shared/ErrorBoundary"
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
     const pathname = usePathname()
@@ -68,7 +69,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                     </div>
                 </header>
                 <div className="flex-1 overflow-y-auto p-6">
-                    {children}
+                    <ErrorBoundary>
+                        {children}
+                    </ErrorBoundary>
                 </div>
             </main>
         </div>

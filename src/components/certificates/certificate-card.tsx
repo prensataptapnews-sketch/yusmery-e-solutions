@@ -41,7 +41,6 @@ export default function CertificateCard({ certificate }: CertificateProps) {
                     url: `${window.location.origin}/verify/${certificate.code}`
                 });
             } catch (err) {
-                console.log('Error sharing:', err);
             }
         } else {
             navigator.clipboard.writeText(`${window.location.origin}/verify/${certificate.code}`);

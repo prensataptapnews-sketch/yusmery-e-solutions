@@ -44,7 +44,6 @@ export async function POST(req: NextRequest) {
         // TODO: Lógica para habilitar/deshabilitar módulos específicos
         // Guardar en tabla ModuleAccess (crear si no existe)
         if (enabledModules && enabledModules.length > 0) {
-            console.log(`[TODO] Enable modules for users:`, enabledModules);
             // We would create ModuleAccess entries here.
         }
 

@@ -48,7 +48,6 @@ export async function POST(req: Request) {
         })
 
         // TODO: Send Email Notification to Student
-        console.log(`Sending feedback email to student for submission ${submissionId}. Action: ${action}`)
 
         return NextResponse.json({ success: true })
 

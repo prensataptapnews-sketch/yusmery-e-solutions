@@ -141,7 +141,6 @@ export async function POST(request: Request) {
                         }
                     });
 
-                    console.log('✅ Certificado generado:', code);
                 } catch (error) {
                     console.error('❌ Error generando certificado:', error);
                 }

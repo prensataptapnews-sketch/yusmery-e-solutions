@@ -115,53 +115,7 @@ export default function LoginPage() {
                         </Button>
                     </div>
                 </form>
-                {/* Developer Mode Quick Access */}
-                <div className="mt-6 border-t pt-4">
-                    <p className="text-xs font-semibold text-center text-muted-foreground mb-3 uppercase tracking-wider">
-                        Modo Desarrollo: Acceso Rápido
-                    </p>
-                    <div className="grid grid-cols-2 gap-2">
-                        <Button
-                            variant="outline"
-                            size="sm"
-                            className="text-xs h-8 border-teal-200 hover:bg-teal-50 hover:text-teal-700"
-                            onClick={() => onSubmit({ email: "admin@esolutions.com", password: "admin123" })}
-                        >
-                            Super Admin
-                        </Button>
-                        <Button
-                            variant="outline"
-                            size="sm"
-                            className="text-xs h-8 border-blue-200 hover:bg-blue-50 hover:text-blue-700"
-                            onClick={() => onSubmit({ email: "area@empresa.com", password: "123456" })}
-                        >
-                            Admin Área
-                        </Button>
-                        <Button
-                            variant="outline"
-                            size="sm"
-                            className="text-xs h-8 border-purple-200 hover:bg-purple-50 hover:text-purple-700"
-                            onClick={() => onSubmit({ email: "profe@empresa.com", password: "123456" })}
-                        >
-                            Profesor
-                        </Button>
-                        <Button
-                            variant="outline"
-                            size="sm"
-                            className="text-xs h-8 border-green-200 hover:bg-green-50 hover:text-green-700"
-                            onClick={() => onSubmit({ email: "colaborador@empresa.com", password: "123456" })}
-                        >
-                            Estudiante
-                        </Button>
-                    </div>
-                </div>
             </CardContent>
-            <CardFooter className="flex flex-col space-y-2 pb-6">
-                <div className="text-xs text-muted-foreground text-center opacity-70">
-                    Sistema en modo desarrollo.<br />
-                    Las credenciales han sido restablecidas.
-                </div>
-            </CardFooter>
         </Card>
     )
 }

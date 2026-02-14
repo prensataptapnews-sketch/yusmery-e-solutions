@@ -6,8 +6,9 @@ export default auth((req) => {
     const { nextUrl } = req
     const userRole = req.auth?.user?.role
 
-    const isPublicRoute = nextUrl.pathname.startsWith("/verify") || nextUrl.pathname.startsWith("/api/public")
+    const isPublicRoute = nextUrl.pathname.startsWith("/verify") || nextUrl.pathname.startsWith("/api/public") || nextUrl.pathname.startsWith("/api/auth")
     const isLoginRoute = nextUrl.pathname.startsWith("/login")
+    const isApiRoute = nextUrl.pathname.startsWith("/api")
 
     // Protected Routes
     const isSuperAdminRoute = nextUrl.pathname.startsWith("/super-admin")
@@ -15,6 +16,13 @@ export default auth((req) => {
     const isTeacherRoute = nextUrl.pathname.startsWith("/teacher")
 
     if (isPublicRoute) return NextResponse.next()
+
+    if (isApiRoute && !isLoggedIn) {
+        return new NextResponse(
+            JSON.stringify({ error: "Unauthorized" }),
+            { status: 401, headers: { "Content-Type": "application/json" } }
+        )
+    }
 
     if (isLoginRoute) {
         if (isLoggedIn) {
@@ -56,6 +64,7 @@ export default auth((req) => {
 
 export const config = {
     matcher: [
+        '/api/:path*',
         '/dashboard/:path*',
         '/admin/:path*',
         '/teacher/:path*',
