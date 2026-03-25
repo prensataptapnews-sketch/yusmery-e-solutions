@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { signOut, useSession } from "next-auth/react"
-import { BookOpen, Home, Library, LogOut, User, Menu, ShieldCheck } from "lucide-react"
+import { BookOpen, Home, Library, LogOut, User, Menu, ShieldCheck, ClipboardList, Users, LayoutGrid } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -47,6 +47,12 @@ export function Header() {
             label: "Certificados",
             icon: BookOpen,
             active: pathname.startsWith("/certificates"),
+        },
+        {
+            href: "/dashboard/evaluaciones",
+            label: "Mis Evaluaciones",
+            icon: ClipboardList,
+            active: pathname.startsWith("/dashboard/evaluaciones"),
         },
     ]
 

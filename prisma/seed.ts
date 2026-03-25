@@ -90,6 +90,15 @@ async function main() {
     await prisma.program.deleteMany()
     await prisma.companyModule.deleteMany()
     await prisma.systemModule.deleteMany()
+    
+    // Add missing talent/dashboard tables
+    await prisma.kudo.deleteMany()
+    await prisma.competencyScore.deleteMany()
+    await prisma.competencyEvaluation.deleteMany()
+    await prisma.talentMatrixResult.deleteMany()
+    await prisma.climateResponse.deleteMany()
+    await prisma.peerNomination.deleteMany()
+    await prisma.goal.deleteMany()
 
     // Now safe to delete users and companies
     await prisma.user.deleteMany()

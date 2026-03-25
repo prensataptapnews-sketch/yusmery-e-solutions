@@ -22,42 +22,46 @@ export function UserNav() {
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="relative h-10 w-10 rounded-full">
-                    <Avatar className="h-10 w-10 border border-slate-200">
+                <Button variant="ghost" className="relative h-11 w-11 rounded-full ring-2 ring-white hover:ring-indigo-100 transition-all shadow-sm">
+                    <Avatar className="h-11 w-11 border-2 border-white shadow-sm">
                         <AvatarImage src={session?.user?.image || ""} alt={session?.user?.name || ""} />
-                        <AvatarFallback className="bg-indigo-100 text-indigo-700 font-bold">
+                        <AvatarFallback className="bg-gradient-to-br from-indigo-500 to-purple-600 text-white font-black">
                             {session?.user?.name?.slice(0, 2).toUpperCase() || "PR"}
                         </AvatarFallback>
                     </Avatar>
                 </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-56" align="end" forceMount>
-                <DropdownMenuLabel className="font-normal">
-                    <div className="flex flex-col space-y-1">
-                        <p className="text-sm font-medium leading-none">{session?.user?.name}</p>
-                        <p className="text-xs leading-none text-muted-foreground">
-                            {session?.user?.email}
+            {/* Forced bg-white and high shadow completely overriding transparency issues */}
+            <DropdownMenuContent className="w-64 bg-white border border-slate-200 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.15)] rounded-2xl p-2 z-[100] mt-2" align="end" forceMount>
+                <DropdownMenuLabel className="font-normal p-3">
+                    <div className="flex flex-col space-y-1.5">
+                        <p className="text-sm font-bold text-slate-800 leading-none">{session?.user?.name || 'Profesor'}</p>
+                        <p className="text-xs font-medium leading-none text-slate-500">
+                            {session?.user?.email || 'admin@e-solutions.com'}
                         </p>
                     </div>
                 </DropdownMenuLabel>
-                <DropdownMenuSeparator />
+                <DropdownMenuSeparator className="bg-slate-100 mb-2" />
                 <DropdownMenuGroup>
-                    <DropdownMenuItem asChild>
-                        <Link href="/teacher/profile" className="cursor-pointer">
-                            <User className="nr-2 h-4 w-4 mr-2" />
-                            <span>Mi Perfil</span>
+                    <DropdownMenuItem asChild className="cursor-pointer hover:bg-slate-50 focus:bg-slate-50 rounded-xl py-2.5 px-3 transition-colors">
+                        <Link href="/teacher/profile" className="flex items-center">
+                            <User className="mr-3 h-4 w-4 text-slate-500" />
+                            <span className="font-semibold text-slate-700">Mi Perfil</span>
                         </Link>
                     </DropdownMenuItem>
-                    <DropdownMenuItem asChild>
-                        <Link href="/teacher/settings" className="cursor-pointer">
-                            <Settings className="mr-2 h-4 w-4" />
-                            <span>Configuración</span>
+                    <DropdownMenuItem asChild className="cursor-pointer hover:bg-slate-50 focus:bg-slate-50 rounded-xl py-2.5 px-3 transition-colors mt-1">
+                        <Link href="/teacher/settings" className="flex items-center">
+                            <Settings className="mr-3 h-4 w-4 text-slate-500" />
+                            <span className="font-semibold text-slate-700">Configuración</span>
                         </Link>
                     </DropdownMenuItem>
                 </DropdownMenuGroup>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={() => signOut()} className="text-red-600 focus:text-red-600 focus:bg-red-50 cursor-pointer">
-                    <LogOut className="mr-2 h-4 w-4" />
+                <DropdownMenuSeparator className="bg-slate-100 my-2" />
+                <DropdownMenuItem 
+                    onClick={() => signOut({ callbackUrl: '/login' })} 
+                    className="cursor-pointer text-rose-600 hover:bg-rose-50 hover:text-rose-700 focus:bg-rose-50 focus:text-rose-700 rounded-xl py-2.5 px-3 transition-colors font-semibold"
+                >
+                    <LogOut className="mr-3 h-4 w-4" />
                     <span>Cerrar Sesión</span>
                 </DropdownMenuItem>
             </DropdownMenuContent>

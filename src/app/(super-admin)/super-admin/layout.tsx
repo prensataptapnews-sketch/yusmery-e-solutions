@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { signOut } from "next-auth/react"
 import { SuperAdminUserNav } from "@/components/super-admin/user-nav"
+import { PanelSwitcher } from "@/components/dashboard/panel-switcher"
 
 export default function SuperAdminLayout({ children }: { children: React.ReactNode }) {
     const pathname = usePathname()
@@ -66,8 +67,9 @@ export default function SuperAdminLayout({ children }: { children: React.ReactNo
             <main className="flex-1 flex flex-col overflow-hidden">
                 <header className="h-16 px-6 border-b bg-background flex items-center justify-between">
                     <h1 className="text-xl font-semibold">Panel de Control Total</h1>
-                    <div className="flex items-center gap-4">
-                        <span className="text-sm text-muted-foreground hidden md:inline-block">Super Admin</span>
+                    <div className="flex items-center gap-3">
+                        <PanelSwitcher />
+
                         <SuperAdminUserNav />
                     </div>
                 </header>

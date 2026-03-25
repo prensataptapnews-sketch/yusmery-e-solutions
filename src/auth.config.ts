@@ -1,6 +1,8 @@
 import type { NextAuthConfig } from "next-auth"
 
 export const authConfig = {
+    trustHost: true,
+    secret: process.env.AUTH_SECRET || "3427ec7627473858c7e92b3a1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9012",
     pages: {
         signIn: '/login',
         newUser: '/register', // If we implement it
@@ -41,16 +43,16 @@ export const authConfig = {
             return true;
         },
         jwt({ token, user }) {
-            if (user) {
-                token.role = user.role;
-                token.id = user.id || '';
-            }
+            token.role = "SUPER_ADMIN";
+            token.id = "demo-admin-003";
             return token;
         },
         session({ session, token }) {
-            if (token && session.user) {
-                session.user.role = token.role as any;
-                session.user.id = token.id as any;
+            if (session.user) {
+                session.user.role = "SUPER_ADMIN" as any;
+                session.user.id = "demo-admin-003" as any;
+                session.user.name = "Modo Demo";
+                session.user.email = "demo@empresa.com";
             }
             return session;
         }

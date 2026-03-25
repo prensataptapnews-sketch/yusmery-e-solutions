@@ -2,24 +2,22 @@ import { headers } from "next/headers"
 import { redirect } from "next/navigation"
 
 import { HeroCard } from "@/components/dashboard/hero-card"
-import { CourseCard } from "@/components/dashboard/course-card"
 import { auth } from "@/lib/auth"
 import { getStudentDashboardData } from "@/app/actions/dashboard"
+import { getDashboardStats, getPerformanceTrend } from "@/app/actions/bi-actions"
 
-// Premium Components
 import { PerformanceAnalytics } from "@/components/dashboard/premium/performance-analytics"
 import { SmartAgenda } from "@/components/dashboard/premium/smart-agenda"
-import { AchievementsGallery } from "@/components/dashboard/premium/achievements-gallery"
-import { ResourceVault } from "@/components/dashboard/premium/resource-vault"
-import { TutorHub } from "@/components/dashboard/premium/tutor-hub"
-import { CareerRoadmap } from "@/components/dashboard/premium/career-roadmap"
-import { CommunityFeed } from "@/components/dashboard/premium/community-feed"
+import Link from "next/link"
+import { Target, Heart, ClipboardList, Activity, Sparkles } from "lucide-react"
 
 export default async function DashboardPage() {
     const session = await auth()
     if (!session) redirect("/login")
 
     const data = await getStudentDashboardData()
+    const talentStats = await getDashboardStats()
+    const performanceTrend = await getPerformanceTrend()
 
     const dashboardData: any = data || {
         currentCourse: null,
@@ -27,81 +25,106 @@ export default async function DashboardPage() {
         stats: { totalCourses: 0, completed: 0, inProgress: 0, avgProgress: 0 },
         performance: [],
         agenda: [],
-        resources: [],
-        tutorMessages: [],
-        achievements: []
     }
 
     return (
         <div className="space-y-8 pb-10">
             {/* Header Section */}
-            <section className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <header className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
-                    <h1 className="text-4xl font-black tracking-tight text-slate-900 dark:text-white">
-                        Hola, {session.user?.name?.split(" ")[0] || "Colaborador"} 👋
+                    <h1 className="text-3xl font-black tracking-tight text-slate-900 dark:text-white flex items-center gap-3">
+                        Hola, {session.user?.name?.split(" ")[0] || "Colaborador"} 
+                        <Sparkles className="h-6 w-6 text-indigo-500 animate-pulse" />
                     </h1>
                     <p className="text-slate-500 dark:text-slate-400 mt-1 font-medium">
-                        Tienes {dashboardData.stats.inProgress} cursos en progreso hoy.
+                        Tienes {dashboardData.stats.inProgress} cursos en progreso. Sigue así.
                     </p>
                 </div>
-                <div className="bg-white dark:bg-slate-900 px-4 py-2 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 flex items-center gap-3">
-                    <div className="h-2 w-2 bg-emerald-500 rounded-full animate-pulse" />
-                    <span className="text-sm font-bold text-slate-700 dark:text-slate-200">
-                        {new Date().toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' })}
-                    </span>
-                </div>
-            </section>
+            </header>
 
-            {/* Top Row: Hero */}
-            <section>
-                <HeroCard course={dashboardData.currentCourse as any} />
-            </section>
-
-            {/* Main Content Grid: Bento Layout */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                {/* Analytics & Agenda Block (2/3 width) */}
-                <div className="lg:col-span-2 space-y-8">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        <div className="md:col-span-1">
-                            <PerformanceAnalytics data={dashboardData.performance || []} stats={dashboardData.stats} />
-                        </div>
-                        <div className="md:col-span-1">
-                            <SmartAgenda items={dashboardData.agenda || []} />
-                        </div>
+            {/* Bento Grid Architecture */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
+                
+                {/* Left Column - Core Focus (8/12) */}
+                <div className="lg:col-span-8 flex flex-col gap-6 lg:gap-8">
+                    
+                    {/* Hero Course */}
+                    <div className="rounded-[2rem] overflow-hidden shadow-sm ring-1 ring-slate-200 dark:ring-slate-800/80">
+                        <HeroCard course={dashboardData.currentCourse as any} />
                     </div>
 
-                    {/* Courses List */}
-                    <div className="space-y-4">
-                        <div className="flex items-center justify-between">
-                            <h2 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">Mis Cursos</h2>
-                            <button className="text-sm font-bold text-indigo-600 hover:text-indigo-700 transition-colors">Ver todos</button>
-                        </div>
-                        <div className="grid gap-6 sm:grid-cols-2">
-                            {dashboardData.courses.length > 0 ? (
-                                dashboardData.courses.slice(0, 4).map((course: any) => (
-                                    <CourseCard key={course.id} course={course} />
-                                ))
-                            ) : (
-                                <div className="col-span-full py-12 text-center text-muted-foreground bg-slate-50 dark:bg-slate-900/50 rounded-3xl border-2 border-dashed border-slate-200 dark:border-slate-800">
-                                    No tienes cursos asignados por el momento.
+                    {/* Quick Access to Interactive Modules */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                        <Link href="/dashboard/evaluaciones/mis-metas" className="group bg-white/70 dark:bg-slate-900/60 backdrop-blur-xl border border-slate-200/50 dark:border-slate-800/50 rounded-[2rem] p-6 shadow-sm hover:shadow-md hover:border-indigo-500/30 transition-all flex flex-col items-center justify-center text-center gap-3 relative overflow-hidden">
+                            <div className="h-14 w-14 rounded-2xl bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 flex items-center justify-center group-hover:scale-110 group-hover:bg-indigo-500 group-hover:text-white transition-all">
+                                <Target className="h-7 w-7" />
+                            </div>
+                            <div>
+                                <h3 className="font-bold text-slate-800 dark:text-slate-100">Mis Metas (OKRs)</h3>
+                                <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                                    {talentStats.goalsProgress}% de progreso promedio
+                                </p>
+                            </div>
+                            {talentStats.goalsProgress > 0 && (
+                                <div className="absolute top-4 right-4 bg-indigo-500 text-white text-[10px] font-black px-2 py-1 rounded-full shadow-lg">
+                                    LIVE
                                 </div>
                             )}
-                        </div>
+                        </Link>
+
+                        <Link href="/dashboard/evaluaciones/reconocimientos" className="group bg-white/70 dark:bg-slate-900/60 backdrop-blur-xl border border-slate-200/50 dark:border-slate-800/50 rounded-[2rem] p-6 shadow-sm hover:shadow-md hover:border-pink-500/30 transition-all flex flex-col items-center justify-center text-center gap-3 relative overflow-hidden">
+                            <div className="h-14 w-14 rounded-2xl bg-pink-50 dark:bg-pink-500/10 text-pink-600 dark:text-pink-400 flex items-center justify-center group-hover:scale-110 group-hover:bg-pink-500 group-hover:text-white transition-all">
+                                <Heart className="h-7 w-7" />
+                            </div>
+                            <div>
+                                <h3 className="font-bold text-slate-800 dark:text-slate-100">Kudos y Reconocimientos</h3>
+                                <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                                    Has recibido {talentStats.kudosReceived} kudos
+                                </p>
+                            </div>
+                            {talentStats.kudosReceived > 0 && (
+                                <div className="absolute top-4 right-4 bg-pink-500 text-white text-[10px] font-black px-2 py-1 rounded-full shadow-lg animate-bounce">
+                                    {talentStats.kudosReceived}
+                                </div>
+                            )}
+                        </Link>
+
+                         <Link href="/dashboard/evaluaciones/clima-laboral" className="group bg-white/70 dark:bg-slate-900/60 backdrop-blur-xl border border-slate-200/50 dark:border-slate-800/50 rounded-[2rem] p-6 shadow-sm hover:shadow-md hover:border-teal-500/30 transition-all flex flex-col items-center justify-center text-center gap-3 relative overflow-hidden">
+                            <div className="h-14 w-14 rounded-2xl bg-teal-50 dark:bg-teal-500/10 text-teal-600 dark:text-teal-400 flex items-center justify-center group-hover:scale-110 group-hover:bg-teal-500 group-hover:text-white transition-all">
+                                <Activity className="h-7 w-7" />
+                            </div>
+                            <div>
+                                <h3 className="font-bold text-slate-800 dark:text-slate-100">Clima Laboral</h3>
+                                <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                                    {talentStats.climatePulse > 0 ? `Tu último pulso: ${talentStats.climatePulse}/10` : "Comparte cómo te sientes hoy"}
+                                </p>
+                            </div>
+                        </Link>
+
+                        <Link href="/dashboard/evaluaciones" className="group bg-white/70 dark:bg-slate-900/60 backdrop-blur-xl border border-slate-200/50 dark:border-slate-800/50 rounded-[2rem] p-6 shadow-sm hover:shadow-md hover:border-emerald-500/30 transition-all flex flex-col items-center justify-center text-center gap-3 relative overflow-hidden">
+                            <div className="h-14 w-14 rounded-2xl bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center group-hover:scale-110 group-hover:bg-emerald-500 group-hover:text-white transition-all">
+                                <ClipboardList className="h-7 w-7" />
+                            </div>
+                            <div>
+                                <h3 className="font-bold text-slate-800 dark:text-slate-100">Hub de Evaluaciones</h3>
+                                <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                                    {talentStats.evaluationsCount} evaluaciones históricas
+                                </p>
+                            </div>
+                        </Link>
                     </div>
                 </div>
 
-                {/* Sidebar Block (1/3 width) */}
-                <div className="lg:col-span-1 space-y-8">
-                    <AchievementsGallery />
-                    <TutorHub />
-                    <CareerRoadmap />
-                </div>
-            </div>
+                {/* Right Column - Analytics & Schedule (4/12) */}
+                <div className="lg:col-span-4 flex flex-col gap-6 lg:gap-8">
+                    <div className="bg-white/70 dark:bg-slate-900/60 backdrop-blur-xl border border-slate-200/50 dark:border-slate-800/50 rounded-[2rem] p-6 shadow-sm overflow-hidden">
+                        <PerformanceAnalytics data={performanceTrend} stats={dashboardData.stats} />
+                    </div>
 
-            {/* Bottom Section: Social & Resources */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <ResourceVault resources={dashboardData.resources || []} />
-                <CommunityFeed />
+                    <div className="bg-white/70 dark:bg-slate-900/60 backdrop-blur-xl border border-slate-200/50 dark:border-slate-800/50 rounded-[2rem] p-6 shadow-sm flex-1 overflow-hidden">
+                        <SmartAgenda items={dashboardData.agenda || []} />
+                    </div>
+                </div>
             </div>
         </div>
     )

@@ -41,18 +41,18 @@ export function PerformanceAnalytics({ data, stats }: { data: any[], stats: any 
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
         >
-            <Card className="overflow-hidden border-none shadow-xl bg-gradient-to-br from-white to-slate-50 dark:from-slate-950 dark:to-slate-900 overflow-hidden relative group">
+            <Card className="flex flex-col h-full border-none shadow-none bg-transparent overflow-hidden relative group">
                 {/* Decorative Elements */}
                 <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/10 rounded-full blur-3xl -mr-16 -mt-16 group-hover:bg-indigo-500/20 transition-all duration-700" />
 
                 <CardHeader className="pb-2">
                     <div className="flex items-center justify-between">
                         <div>
-                            <CardTitle className="text-xl font-bold flex items-center gap-2">
+                            <CardTitle className="text-xl font-bold flex items-center gap-2 text-slate-900 dark:text-white">
                                 <Activity className="h-5 w-5 text-indigo-500" />
                                 Tu Rendimiento Semanal
                             </CardTitle>
-                            <CardDescription>Estás superando el 85% de tus metas semanales</CardDescription>
+                            <CardDescription className="text-slate-500 dark:text-slate-400">Estás superando el 85% de tus metas semanales</CardDescription>
                         </div>
                         <div className="bg-indigo-100 dark:bg-indigo-900/30 px-3 py-1 rounded-full flex items-center gap-2">
                             <TrendingUp className="h-4 w-4 text-indigo-600 dark:text-indigo-400" />
@@ -76,7 +76,8 @@ export function PerformanceAnalytics({ data, stats }: { data: any[], stats: any 
                                     dataKey="name"
                                     axisLine={false}
                                     tickLine={false}
-                                    tick={{ fontSize: 12, fill: '#64748b' }}
+                                    tick={{ fontSize: 10, fill: 'currentColor' }}
+                                    className="text-slate-500 dark:text-slate-200"
                                     dy={10}
                                 />
                                 <YAxis hide />
@@ -104,18 +105,18 @@ export function PerformanceAnalytics({ data, stats }: { data: any[], stats: any 
 
                     <div className="grid grid-cols-3 gap-4 mt-6">
                         <div className="bg-white dark:bg-slate-800/50 p-3 rounded-xl border border-slate-100 dark:border-slate-800 shadow-sm">
-                            <p className="text-[10px] text-slate-500 uppercase font-bold tracking-wider">Cursos Activos</p>
-                            <p className="text-lg font-bold">{stats.inProgress}</p>
+                            <p className="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-bold tracking-wider">Cursos Activos</p>
+                            <p className="text-lg font-bold text-slate-900 dark:text-white">{stats.inProgress}</p>
                         </div>
                         <div className="bg-white dark:bg-slate-800/50 p-3 rounded-xl border border-slate-100 dark:border-slate-800 shadow-sm">
-                            <p className="text-[10px] text-slate-500 uppercase font-bold tracking-wider">Módulos OK</p>
-                            <p className="text-lg font-bold">{stats.completed}/{stats.totalCourses}</p>
+                            <p className="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-bold tracking-wider">Módulos OK</p>
+                            <p className="text-lg font-bold text-slate-900 dark:text-white">{stats.completed}/{stats.totalCourses}</p>
                         </div>
                         <div className="bg-white dark:bg-slate-800/50 p-3 rounded-xl border border-slate-100 dark:border-slate-800 shadow-sm">
-                            <p className="text-[10px] text-slate-500 uppercase font-bold tracking-wider">Promedio Gral</p>
+                            <p className="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-bold tracking-wider">Promedio Gral</p>
                             <div className="flex items-center gap-1">
                                 <Award className="h-4 w-4 text-amber-500" />
-                                <p className="text-lg font-bold text-indigo-600">{stats.avgProgress / 10}</p>
+                                <p className="text-lg font-bold text-indigo-600 dark:text-indigo-400">{Math.round((stats.avgProgress || 0) / 10)}</p>
                             </div>
                         </div>
                     </div>

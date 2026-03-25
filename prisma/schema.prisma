@@ -1,6 +1,7 @@
 generator client {
-  provider   = "prisma-client-js"
-  engineType = "library"
+  provider      = "prisma-client-js"
+  engineType    = "library"
+  binaryTargets = ["native", "rhel-openssl-1.0.x", "rhel-openssl-3.0.x", "debian-openssl-1.1.x", "debian-openssl-3.0.x"]
 }
 
 datasource db {
@@ -10,11 +11,14 @@ datasource db {
 }
 
 enum Area {
-  TALENTO
-  FINANZAS
+  GENERAL
+  TECNOLOGIA
+  VENTAS
+  MARKETING
   OPERACIONES
-  COMUNICACION
-  SISTEMAS
+  RRHH
+  DISENO
+  ATENCION_AL_CLIENTE
 }
 
 model Company {
@@ -48,14 +52,23 @@ model User {
   createdAt             DateTime               @default(now())
   updatedAt             DateTime               @updatedAt
   certificates          Certificate[]
+  climateResponses      ClimateResponse[]
   comments              Comment[]
+  givenEvaluations      CompetencyEvaluation[] @relation("EvaluatorCompetencies")
+  competencyEvaluations CompetencyEvaluation[] @relation("UserCompetencies")
   teachingCourses       Course[]               @relation("TeacherCourses")
   diagnosticResults     DiagnosticResult[]
   enrollments           Enrollment[]
   evaluationSubmissions EvaluationSubmission[]
-  repliedInquiries      Inquiry[]              @relation("TeacherInquiries")
+  goals                 Goal[]
   studentInquiries      Inquiry[]              @relation("StudentInquiries")
+  repliedInquiries      Inquiry[]              @relation("TeacherInquiries")
+  receivedKudos         Kudo[]                 @relation("KudoReceiver")
+  givenKudos            Kudo[]                 @relation("KudoSender")
+  invitations           PeerNomination[]       @relation("PeerInvitations")
+  nominations           PeerNomination[]       @relation("UserNominations")
   progress              Progress[]
+  talentMatrixResults   TalentMatrixResult[]
   company               Company?               @relation(fields: [companyId], references: [id])
 }
 
@@ -75,8 +88,8 @@ model Course {
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
   certificates Certificate[]
-  teacher      User?         @relation("TeacherCourses", fields: [teacherId], references: [id])
   company      Company       @relation(fields: [companyId], references: [id])
+  teacher      User?         @relation("TeacherCourses", fields: [teacherId], references: [id])
   enrollments  Enrollment[]
   evaluations  Evaluation[]
   inquiries    Inquiry[]
@@ -131,8 +144,8 @@ model Comment {
   lessonId  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   lesson    Lesson   @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
   @@index([lessonId])
@@ -298,8 +311,8 @@ model EvaluationSubmission {
   reviewedBy   String?
   reviewedAt   DateTime?
   submittedAt  DateTime   @default(now())
-  user         User       @relation(fields: [userId], references: [id])
   evaluation   Evaluation @relation(fields: [evaluationId], references: [id])
+  user         User       @relation(fields: [userId], references: [id])
 
   @@index([userId])
   @@index([evaluationId])
@@ -316,9 +329,9 @@ model Inquiry {
   status    String   @default("PENDING")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  teacher   User?    @relation("TeacherInquiries", fields: [teacherId], references: [id])
   course    Course   @relation(fields: [courseId], references: [id])
   student   User     @relation("StudentInquiries", fields: [studentId], references: [id])
+  teacher   User?    @relation("TeacherInquiries", fields: [teacherId], references: [id])
 }
 
 model SystemModule {
@@ -344,4 +357,105 @@ model CompanyModule {
   module    SystemModule @relation(fields: [moduleKey], references: [key], onDelete: Cascade)
 
   @@unique([companyId, moduleKey])
+}
+
+model CompetencyEvaluation {
+  id           String            @id @default(cuid())
+  userId       String
+  evaluatorId  String?
+  type         String
+  status       String            @default("COMPLETED")
+  overallScore Float?
+  feedback     String?
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
+  evaluator    User?             @relation("EvaluatorCompetencies", fields: [evaluatorId], references: [id])
+  user         User              @relation("UserCompetencies", fields: [userId], references: [id], onDelete: Cascade)
+  scores       CompetencyScore[]
+
+  @@index([userId])
+  @@index([evaluatorId])
+}
+
+model CompetencyScore {
+  id             String               @id @default(cuid())
+  evaluationId   String
+  competencyName String
+  score          Int
+  evaluation     CompetencyEvaluation @relation(fields: [evaluationId], references: [id], onDelete: Cascade)
+
+  @@index([evaluationId])
+}
+
+model TalentMatrixResult {
+  id          String   @id @default(cuid())
+  userId      String
+  period      String
+  performance Float
+  potential   Float
+  boxNumber   Int?
+  comment     String?
+  createdAt   DateTime @default(now())
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, period])
+  @@index([userId])
+}
+
+model Kudo {
+  id         String   @id @default(cuid())
+  senderId   String
+  receiverId String
+  message    String
+  category   String?
+  createdAt  DateTime @default(now())
+  receiver   User     @relation("KudoReceiver", fields: [receiverId], references: [id])
+  sender     User     @relation("KudoSender", fields: [senderId], references: [id])
+
+  @@index([senderId])
+  @@index([receiverId])
+}
+
+model Goal {
+  id          String    @id @default(cuid())
+  userId      String
+  title       String
+  description String?
+  category    String    // OKR, PERSONAL, PROFESSIONAL
+  status      String    @default("IN_PROGRESS") // COMPLETED, CANCELLED, etc.
+  progress    Int       @default(0) // 0-100
+  dueDate     DateTime?
+  period      String?   // e.g., "2024"
+  order       Int       @default(0)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model ClimateResponse {
+  id        String   @id @default(cuid())
+  userId    String?
+  category  String
+  score     Int
+  comment   String?
+  createdAt DateTime @default(now())
+  user      User?    @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+}
+
+model PeerNomination {
+  id        String   @id @default(cuid())
+  userId    String
+  peerId    String
+  status    String   @default("PENDING")
+  createdAt DateTime @default(now())
+  peer      User     @relation("PeerInvitations", fields: [peerId], references: [id], onDelete: Cascade)
+  user      User     @relation("UserNominations", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, peerId])
+  @@index([userId])
+  @@index([peerId])
 }

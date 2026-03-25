@@ -13,7 +13,7 @@ export function SmartAgenda({ items }: { items: any[] }) {
     ]
 
     return (
-        <Card className="h-full border-none shadow-xl bg-white dark:bg-slate-950 overflow-hidden">
+        <Card className="h-full border-none bg-transparent shadow-none overflow-hidden flex flex-col">
             <CardHeader className="pb-4">
                 <CardTitle className="text-xl font-bold flex items-center gap-2">
                     <Calendar className="h-5 w-5 text-indigo-500" />
@@ -37,13 +37,13 @@ export function SmartAgenda({ items }: { items: any[] }) {
                                 <Badge variant={item.urgent ? "destructive" : "secondary"} className="text-[10px] px-2 py-0">
                                     {item.type}
                                 </Badge>
-                                <div className="flex items-center gap-1 text-xs font-medium opacity-70">
+                                <div className="flex items-center gap-1 text-xs font-medium text-slate-500 dark:text-slate-400">
                                     <Clock className={`h-3 w-3 ${item.urgent ? 'text-rose-500 animate-pulse' : ''}`} />
                                     {item.deadline}
                                 </div>
                             </div>
-                            <h4 className="text-sm font-bold truncate pr-6 group-hover:text-indigo-600 transition-colors">{item.title}</h4>
-                            <p className="text-xs text-muted-foreground mt-1">{item.course}</p>
+                            <h4 className="text-sm font-bold truncate pr-6 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 text-slate-900 dark:text-white transition-colors">{item.title}</h4>
+                            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">{item.course}</p>
 
                             <div className="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
                                 <div className="h-6 w-6 rounded-full bg-indigo-500 text-white flex items-center justify-center shadow-sm">
